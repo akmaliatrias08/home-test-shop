@@ -9,6 +9,98 @@
     "host": "localhost:5000",
     "basePath": "/",
     "paths": {
+        "/auth/authorize": {
+            "get": {
+                "description": "Authorize user token after login",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Authorize user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.SuccessAuthorizeToken"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "Login a new user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "Login user",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.LoginDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/users.SuccessLoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Regist a new user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "Register user",
+                        "name": "register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/users.CreateUserDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "Responds if the APIs success.",
@@ -42,13 +134,13 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Page to load",
+                        "description": "Number of page to load",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Page size or limit list data",
+                        "description": "Number page size or limit to display role data",
                         "name": "pageSize",
                         "in": "query"
                     }
@@ -196,6 +288,45 @@
                 }
             }
         },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/definitions/models.Role"
+                },
+                "role_id": {
+                    "type": "string"
+                },
+                "salt": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "role.CreateRoleDTO": {
             "type": "object",
             "required": [
@@ -217,6 +348,80 @@
                 "name": {
                     "type": "string",
                     "example": "Shop"
+                }
+            }
+        },
+        "users.CreateUserDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "role_id",
+                "username"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Admin Shop"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "adminshop123"
+                },
+                "role_id": {
+                    "type": "string",
+                    "example": "8cb17fe3-3552-4bfa-852f-a9a7d91fd00d"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "adminshop"
+                }
+            }
+        },
+        "users.LoginDTO": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "example": "adminshop123"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "adminshop"
+                }
+            }
+        },
+        "users.SuccessAuthorizeToken": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "users.SuccessLoginResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/users.TokenResponse"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "users.TokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                 }
             }
         }

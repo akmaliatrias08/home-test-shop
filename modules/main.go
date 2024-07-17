@@ -5,6 +5,7 @@ import (
 	_ "online-shop-home-test/docs"
 	"online-shop-home-test/modules/health"
 	"online-shop-home-test/modules/role"
+	"online-shop-home-test/modules/users"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -34,4 +35,5 @@ func getRoutes() {
 	//router for app
 	health.Init(rootRoute)
 	role.Init(rootRoute)
+	users.Init(rootRoute)
 }

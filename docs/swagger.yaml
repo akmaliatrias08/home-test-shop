@@ -24,6 +24,33 @@ definitions:
         example: "2024-07-16T23:13:03.115483+07:00"
         type: string
     type: object
+  models.User:
+    properties:
+      created_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+      deleted_at:
+        example: "null"
+        type: string
+      id:
+        example: ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
+      role_id:
+        type: string
+      salt:
+        type: string
+      updated_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+      username:
+        type: string
+    type: object
   role.CreateRoleDTO:
     properties:
       name:
@@ -40,6 +67,58 @@ definitions:
     required:
     - name
     type: object
+  users.CreateUserDTO:
+    properties:
+      name:
+        example: Admin Shop
+        type: string
+      password:
+        example: adminshop123
+        type: string
+      role_id:
+        example: 8cb17fe3-3552-4bfa-852f-a9a7d91fd00d
+        type: string
+      username:
+        example: adminshop
+        type: string
+    required:
+    - name
+    - password
+    - role_id
+    - username
+    type: object
+  users.LoginDTO:
+    properties:
+      password:
+        example: adminshop123
+        type: string
+      username:
+        example: adminshop
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  users.SuccessAuthorizeToken:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
+  users.SuccessLoginResponse:
+    properties:
+      data:
+        $ref: '#/definitions/users.TokenResponse'
+      message:
+        example: success
+        type: string
+    type: object
+  users.TokenResponse:
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        type: string
+    type: object
 host: localhost:5000
 info:
   contact: {}
@@ -47,6 +126,66 @@ info:
   title: Online Shop
   version: "1.0"
 paths:
+  /auth/authorize:
+    get:
+      description: Authorize user token after login
+      parameters:
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.SuccessAuthorizeToken'
+      summary: Authorize user
+      tags:
+      - auth
+  /auth/login:
+    post:
+      description: Login a new user
+      parameters:
+      - description: Login user
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/users.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.SuccessLoginResponse'
+      summary: Login user
+      tags:
+      - auth
+  /auth/register:
+    post:
+      description: Regist a new user
+      parameters:
+      - description: Register user
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/users.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Register user
+      tags:
+      - auth
   /health:
     get:
       description: Responds if the APIs success.
@@ -64,11 +203,11 @@ paths:
     get:
       description: Get all role that exist
       parameters:
-      - description: Page to load
+      - description: Number of page to load
         in: query
         name: page
         type: string
-      - description: Page size or limit list data
+      - description: Number page size or limit to display role data
         in: query
         name: pageSize
         type: string
