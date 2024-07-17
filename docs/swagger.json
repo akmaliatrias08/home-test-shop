@@ -119,6 +119,134 @@
                 }
             }
         },
+        "/cart-item": {
+            "get": {
+                "description": "Get all product from customer cart item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart-item"
+                ],
+                "summary": "Get all customer cart item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Number of page to load",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number page size or limit to display data",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.SuccessGetCustomerCartItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.BadRequestGetCustomerCartItemResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new cart item",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart-item"
+                ],
+                "summary": "Create cart item product",
+                "parameters": [
+                    {
+                        "description": "Create cart item",
+                        "name": "cart-item",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.CreateCartItemsDTO"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.SuccessCreateCartItemResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.BadRequestCreateCartItemResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart-item/{id}": {
+            "delete": {
+                "description": "Delete customer cart item by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart-item"
+                ],
+                "summary": "Delete customer cart item by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "cart item ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/cart_items.SuccessDeleteCustomerCartItemResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "description": "Responds if the APIs success.",
@@ -457,6 +585,122 @@
         }
     },
     "definitions": {
+        "cart_items.BadRequestCreateCartItemResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "record not found"
+                }
+            }
+        },
+        "cart_items.BadRequestGetCustomerCartItemResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "record not found"
+                }
+            }
+        },
+        "cart_items.CartItems": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                },
+                "customer": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "customer_id": {
+                    "type": "string",
+                    "example": "7c08adb6-a702-45c5-99b7-1b33868c0e01"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec"
+                },
+                "is_checked_out": {
+                    "type": "boolean"
+                },
+                "product": {
+                    "$ref": "#/definitions/product.Product"
+                },
+                "product_id": {
+                    "type": "string",
+                    "example": "0723074e-5c4b-4c4c-9073-e4f028cbd2f8"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                }
+            }
+        },
+        "cart_items.CreateCartItemsDTO": {
+            "type": "object",
+            "required": [
+                "product_id",
+                "quantity"
+            ],
+            "properties": {
+                "product_id": {
+                    "type": "string",
+                    "example": "0723074e-5c4b-4c4c-9073-e4f028cbd2f8"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "cart_items.SuccessCreateCartItemResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/cart_items.CartItems"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "cart_items.SuccessDeleteCustomerCartItemResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "cart_items.SuccessGetCustomerCartItemResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/cart_items.CartItems"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
         "health.HealthSuccess": {
             "type": "object",
             "properties": {
@@ -621,6 +865,10 @@
         "product.SuccessGetProductByCategoryResponse": {
             "type": "object",
             "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "data": {
                     "type": "array",
                     "items": {

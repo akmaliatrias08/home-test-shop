@@ -58,3 +58,13 @@ func GetProductByProductCategoryId(productCategoryId, page, pageSize string) (in
 
 	return count, productsBycategory, nil
 }
+
+func GetProductById(id string) (models.Product, error) {
+	var product models.Product
+
+	if err := utils.DB.Model(&product).Where("id", id).First(&product).Error; err != nil {
+		return product, err
+	}
+
+	return product, nil
+}

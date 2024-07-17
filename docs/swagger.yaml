@@ -1,5 +1,85 @@
 basePath: /
 definitions:
+  cart_items.BadRequestCreateCartItemResponse:
+    properties:
+      error:
+        example: record not found
+        type: string
+    type: object
+  cart_items.BadRequestGetCustomerCartItemResponse:
+    properties:
+      error:
+        example: record not found
+        type: string
+    type: object
+  cart_items.CartItems:
+    properties:
+      created_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+      customer:
+        $ref: '#/definitions/models.User'
+      customer_id:
+        example: 7c08adb6-a702-45c5-99b7-1b33868c0e01
+        type: string
+      deleted_at:
+        example: "null"
+        type: string
+      id:
+        example: ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec
+        type: string
+      is_checked_out:
+        type: boolean
+      product:
+        $ref: '#/definitions/product.Product'
+      product_id:
+        example: 0723074e-5c4b-4c4c-9073-e4f028cbd2f8
+        type: string
+      quantity:
+        type: integer
+      updated_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+    type: object
+  cart_items.CreateCartItemsDTO:
+    properties:
+      product_id:
+        example: 0723074e-5c4b-4c4c-9073-e4f028cbd2f8
+        type: string
+      quantity:
+        example: 1
+        type: integer
+    required:
+    - product_id
+    - quantity
+    type: object
+  cart_items.SuccessCreateCartItemResponse:
+    properties:
+      data:
+        $ref: '#/definitions/cart_items.CartItems'
+      message:
+        example: success
+        type: string
+    type: object
+  cart_items.SuccessDeleteCustomerCartItemResponse:
+    properties:
+      message:
+        example: success
+        type: string
+    type: object
+  cart_items.SuccessGetCustomerCartItemResponse:
+    properties:
+      count:
+        example: 1
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/cart_items.CartItems'
+        type: array
+      message:
+        example: success
+        type: string
+    type: object
   health.HealthSuccess:
     properties:
       message:
@@ -115,6 +195,9 @@ definitions:
     type: object
   product.SuccessGetProductByCategoryResponse:
     properties:
+      count:
+        example: 1
+        type: integer
       data:
         items:
           $ref: '#/definitions/product.Product'
@@ -347,6 +430,92 @@ paths:
       summary: Register user
       tags:
       - auth
+  /cart-item:
+    get:
+      description: Get all product from customer cart item
+      parameters:
+      - description: Number of page to load
+        in: query
+        name: page
+        type: string
+      - description: Number page size or limit to display data
+        in: query
+        name: pageSize
+        type: string
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart_items.SuccessGetCustomerCartItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/cart_items.BadRequestGetCustomerCartItemResponse'
+      summary: Get all customer cart item
+      tags:
+      - cart-item
+    post:
+      description: Create new cart item
+      parameters:
+      - description: Create cart item
+        in: body
+        name: cart-item
+        required: true
+        schema:
+          $ref: '#/definitions/cart_items.CreateCartItemsDTO'
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart_items.SuccessCreateCartItemResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/cart_items.BadRequestCreateCartItemResponse'
+      summary: Create cart item product
+      tags:
+      - cart-item
+  /cart-item/{id}:
+    delete:
+      description: Delete customer cart item by ID
+      parameters:
+      - description: cart item ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/cart_items.SuccessDeleteCustomerCartItemResponse'
+      summary: Delete customer cart item by ID
+      tags:
+      - cart-item
   /health:
     get:
       description: Responds if the APIs success.

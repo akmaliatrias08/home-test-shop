@@ -3,6 +3,7 @@ package modules
 import (
 	"log"
 	_ "online-shop-home-test/docs"
+	cartItems "online-shop-home-test/modules/cart_items"
 	"online-shop-home-test/modules/health"
 	"online-shop-home-test/modules/product"
 	productCategory "online-shop-home-test/modules/product_category"
@@ -40,4 +41,5 @@ func getRoutes() {
 	users.Init(rootRoute)
 	productCategory.Init(rootRoute)
 	product.Init(rootRoute)
+	cartItems.Init(rootRoute)
 }
