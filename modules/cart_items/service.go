@@ -11,6 +11,7 @@ import (
 	"online-shop-home-test/modules/utils"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 func CreateCartItems(userID string, createCartItemsDTO cartItems.CreateCartItemsDTO) (models.CartItems, error) {
@@ -103,6 +104,16 @@ func GetCustomerCartItemByProductID(userID, productID string) (models.CartItems,
 	}
 
 	return cartItem, nil
+}
+
+func UpdateCustomerCartItemCheckedOut(userID string, ids []string) error {
+	var cartItem models.CartItems
+
+	if err := utils.DB.Model(&cartItem).Where("id IN (?)", ids).Where("customer_id", userID).Clauses(clause.Returning{}).Update("is_checked_out", true).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func DeleteCartItem(userID, id string) error {

@@ -8,6 +8,7 @@ import (
 	"online-shop-home-test/modules/product"
 	productCategory "online-shop-home-test/modules/product_category"
 	"online-shop-home-test/modules/role"
+	"online-shop-home-test/modules/transaction"
 	"online-shop-home-test/modules/users"
 	"os"
 
@@ -42,4 +43,5 @@ func getRoutes() {
 	productCategory.Init(rootRoute)
 	product.Init(rootRoute)
 	cartItems.Init(rootRoute)
+	transaction.Init(rootRoute)
 }
