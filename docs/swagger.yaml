@@ -51,9 +51,81 @@ definitions:
       username:
         type: string
     type: object
+  product.BadRequestCreateProductResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+    type: object
+  product.BadRequestGetProductByCategoryResponse:
+    properties:
+      error:
+        example: record not found
+        type: string
+    type: object
+  product.CreateProductDTO:
+    properties:
+      name:
+        example: Love Gold Earing
+        type: string
+      price:
+        example: 200000
+        type: number
+      product_category_id:
+        example: 34407d74-2ab1-4933-bbe7-1240b0be9702
+        type: string
+    required:
+    - name
+    - price
+    - product_category_id
+    type: object
+  product.Product:
+    properties:
+      created_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+      deleted_at:
+        example: "null"
+        type: string
+      id:
+        example: ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec
+        type: string
+      name:
+        example: Couple Ring
+        type: string
+      price:
+        example: 15000
+        type: number
+      product_category:
+        $ref: '#/definitions/product_category.ProductCategories'
+      product_category_id:
+        example: ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec
+        type: string
+      updated_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+    type: object
+  product.SuccessCreateProductResponse:
+    properties:
+      data:
+        $ref: '#/definitions/product.Product'
+      message:
+        example: success
+        type: string
+    type: object
+  product.SuccessGetProductByCategoryResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/product.Product'
+        type: array
+      message:
+        example: success
+        type: string
+    type: object
   product_category.BadRequestCreateProductCategoryResponse:
     properties:
-      message:
+      error:
         example: error message
         type: string
     type: object
@@ -187,7 +259,7 @@ definitions:
   users.TokenResponse:
     properties:
       access_token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjEzMjQyMTksInVzZXJfaWQiOiI3OTU0OTEyMy05ZmZlLTQ2YTItYTUxNS05YmQ4MTdkOGQzMzEifQ.oR6zbJn6YNy0x2aGJdzpoU-eXLzOtJyAUxHaC5D2txA
         type: string
     type: object
   users.UnauthorizedToken:
@@ -288,6 +360,36 @@ paths:
       summary: Check health APIs
       tags:
       - health
+  /product:
+    post:
+      description: Create new product
+      parameters:
+      - description: Create product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product.CreateProductDTO'
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.SuccessCreateProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/product.BadRequestCreateProductResponse'
+      summary: Create product
+      tags:
+      - product
   /product-category:
     get:
       description: Get all product category
@@ -345,6 +447,43 @@ paths:
       summary: Create product category
       tags:
       - product-category
+  /product/{product_category_id}:
+    get:
+      description: Get all product by product category
+      parameters:
+      - description: product category id from product category
+        in: path
+        name: product_category_id
+        required: true
+        type: string
+      - description: Number of page to load
+        in: query
+        name: page
+        type: string
+      - description: Number page size or limit to display data
+        in: query
+        name: pageSize
+        type: string
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.SuccessGetProductByCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/product.BadRequestGetProductByCategoryResponse'
+      summary: Get all product by product category
+      tags:
+      - product
   /role:
     get:
       description: Get all role that exist

@@ -14,7 +14,7 @@ func GetAllProductCategory(page, pageSize string) (int64, []models.ProductCatego
 	//handle pagination
 	limit, offset, err := helpers.Pagination(page, pageSize)
 	if err != nil {
-		return 0, productCategories, err
+		return count, productCategories, err
 	}
 
 	//count all product categories
@@ -28,6 +28,15 @@ func GetAllProductCategory(page, pageSize string) (int64, []models.ProductCatego
 	}
 
 	return count, productCategories, nil
+}
+
+func GetProductCategoryById(id string) (models.ProductCategories, error) {
+	var productCategory models.ProductCategories
+	if err := utils.DB.Where("id", id).First(&productCategory).Error; err != nil {
+		return productCategory, err
+	}
+
+	return productCategory, nil
 }
 
 func CreateProductCategory(createProductCategoryDTO productCategory.CreateProductCategoryDTO) (models.ProductCategories, error) {

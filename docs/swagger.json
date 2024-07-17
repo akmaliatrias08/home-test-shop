@@ -139,6 +139,51 @@
                 }
             }
         },
+        "/product": {
+            "post": {
+                "description": "Create new product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create product",
+                "parameters": [
+                    {
+                        "description": "Create product",
+                        "name": "product",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/product.CreateProductDTO"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/product.SuccessCreateProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/product.BadRequestCreateProductResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/product-category": {
             "get": {
                 "description": "Get all product category",
@@ -219,6 +264,61 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/product_category.BadRequestCreateProductCategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{product_category_id}": {
+            "get": {
+                "description": "Get all product by product category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get all product by product category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "product category id from product category",
+                        "name": "product_category_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number of page to load",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number page size or limit to display data",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/product.SuccessGetProductByCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/product.BadRequestGetProductByCategoryResponse"
                         }
                     }
                 }
@@ -430,10 +530,113 @@
                 }
             }
         },
+        "product.BadRequestCreateProductResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "error message"
+                }
+            }
+        },
+        "product.BadRequestGetProductByCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "record not found"
+                }
+            }
+        },
+        "product.CreateProductDTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "price",
+                "product_category_id"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Love Gold Earing"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 200000
+                },
+                "product_category_id": {
+                    "type": "string",
+                    "example": "34407d74-2ab1-4933-bbe7-1240b0be9702"
+                }
+            }
+        },
+        "product.Product": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Couple Ring"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 15000
+                },
+                "product_category": {
+                    "$ref": "#/definitions/product_category.ProductCategories"
+                },
+                "product_category_id": {
+                    "type": "string",
+                    "example": "ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                }
+            }
+        },
+        "product.SuccessCreateProductResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/product.Product"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "product.SuccessGetProductByCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/product.Product"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
         "product_category.BadRequestCreateProductCategoryResponse": {
             "type": "object",
             "properties": {
-                "message": {
+                "error": {
                     "type": "string",
                     "example": "error message"
                 }
@@ -628,7 +831,7 @@
             "properties": {
                 "access_token": {
                     "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjEzMjQyMTksInVzZXJfaWQiOiI3OTU0OTEyMy05ZmZlLTQ2YTItYTUxNS05YmQ4MTdkOGQzMzEifQ.oR6zbJn6YNy0x2aGJdzpoU-eXLzOtJyAUxHaC5D2txA"
                 }
             }
         },

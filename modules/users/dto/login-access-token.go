@@ -1,5 +1,5 @@
 package users
 
 type TokenResponse struct {
-	AccessToken string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"`
+	AccessToken string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjEzMjQyMTksInVzZXJfaWQiOiI3OTU0OTEyMy05ZmZlLTQ2YTItYTUxNS05YmQ4MTdkOGQzMzEifQ.oR6zbJn6YNy0x2aGJdzpoU-eXLzOtJyAUxHaC5D2txA"`
 }

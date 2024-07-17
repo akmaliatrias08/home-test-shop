@@ -8,5 +8,5 @@ type SuccessCreateProductCategoryResponse struct {
 }
 
 type BadRequestCreateProductCategoryResponse struct {
-	Error string `json:"message" example:"error message"`
+	Error string `json:"error" example:"error message"`
 }
