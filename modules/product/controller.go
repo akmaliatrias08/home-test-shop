@@ -24,7 +24,7 @@ func routes(rg *gin.RouterGroup) {
 // @Param 						Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Tags         				product
 // @Produce      				json
-// @Success      				200  {object} product.SuccessCreateProductResponse
+// @Success      				201  {object} product.SuccessCreateProductResponse
 // @Failure      				400  {object} product.BadRequestCreateProductResponse
 // @Router       				/product [post]
 func createProduct(ctx *gin.Context) {
@@ -44,7 +44,7 @@ func createProduct(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusCreated, gin.H{
 		"data":    data,
 		"message": "success",
 	})

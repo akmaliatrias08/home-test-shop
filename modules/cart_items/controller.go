@@ -24,7 +24,7 @@ func routes(rg *gin.RouterGroup) {
 // @Param 						Authorization header string true "Insert your access token" default(Bearer <Add access token here>)
 // @Tags         				cart-item
 // @Produce      				json
-// @Success      				200  {object} cart_items.SuccessCreateCartItemResponse
+// @Success      				201  {object} cart_items.SuccessCreateCartItemResponse
 // @Failure      				400  {object} cart_items.BadRequestCreateCartItemResponse
 // @Router       				/cart-item [post]
 func createCartItem(ctx *gin.Context) {

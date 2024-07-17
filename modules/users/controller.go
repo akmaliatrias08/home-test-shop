@@ -24,7 +24,7 @@ func routes(rg *gin.RouterGroup) {
 // @Param			register body users.CreateUserDTO true  "Register user"
 // @Tags         	auth
 // @Produce      	json
-// @Success      	200  {object} users.SuccessRegisterResponse
+// @Success      	201  {object} users.SuccessRegisterResponse
 // @Failure      	400  {object} users.BadRequestRegisterResponse
 // @Router       	/auth/register [post]
 func registerUser(ctx *gin.Context) {

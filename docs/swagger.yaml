@@ -419,8 +419,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/users.SuccessRegisterResponse'
         "400":
@@ -480,8 +480,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/cart_items.SuccessCreateCartItemResponse'
         "400":
@@ -548,8 +548,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/product.SuccessCreateProductResponse'
         "400":
@@ -605,8 +605,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/product_category.SuccessCreateProductCategoryResponse'
         "400":
