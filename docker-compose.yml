@@ -1,0 +1,34 @@
+version: '3.9'
+
+services: 
+  go-app: 
+    container_name: go-app
+    build: .
+    environment: 
+      APP_PORT: 5000
+      JWT_SECRET: 93f3f72d-c80c-4de8-ac26-7e3eaa9fc9df
+      DB_HOST: go-postgres
+      DB_USER: postgres
+      DB_PASSWORD: 123
+      DB_NAME: online_shop_home_test
+      DB_PORT: 5432
+    ports: 
+      - "5000:5000"
+    depends_on: 
+      - go-postgres
+  go-postgres: 
+    container_name: go-postgres
+    image: postgres:12
+    environment: 
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 123
+        POSTGRES_DB: online_shop_home_test
+    ports: 
+      - "5432:5432"
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+
+volumes: 
+  pgdata: {}
+       
+
