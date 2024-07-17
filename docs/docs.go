@@ -145,6 +145,91 @@ const docTemplate = `{
                 }
             }
         },
+        "/product-category": {
+            "get": {
+                "description": "Get all product category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-category"
+                ],
+                "summary": "Get all product category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Number of page to load",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Number page size or limit to display data",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/product_category.SuccessGetAllProductCategoryResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new product category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product-category"
+                ],
+                "summary": "Create product category",
+                "parameters": [
+                    {
+                        "description": "Create product category",
+                        "name": "product-category",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/product_category.CreateProductCategoryDTO"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "default": "Bearer \u003cAdd access token here\u003e",
+                        "description": "Insert your access token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/product_category.SuccessCreateProductCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/product_category.BadRequestCreateProductCategoryResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/role": {
             "get": {
                 "description": "Get all role that exist",
@@ -348,6 +433,80 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "product_category.BadRequestCreateProductCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "error message"
+                }
+            }
+        },
+        "product_category.CreateProductCategoryDTO": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "fashion"
+                }
+            }
+        },
+        "product_category.ProductCategories": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "electronic"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2024-07-16T23:13:03.115483+07:00"
+                }
+            }
+        },
+        "product_category.SuccessCreateProductCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/product_category.ProductCategories"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
+        "product_category.SuccessGetAllProductCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/product_category.ProductCategories"
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
                 }
             }
         },

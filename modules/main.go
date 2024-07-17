@@ -4,6 +4,7 @@ import (
 	"log"
 	_ "online-shop-home-test/docs"
 	"online-shop-home-test/modules/health"
+	productCategory "online-shop-home-test/modules/product_category"
 	"online-shop-home-test/modules/role"
 	"online-shop-home-test/modules/users"
 	"os"
@@ -36,4 +37,5 @@ func getRoutes() {
 	health.Init(rootRoute)
 	role.Init(rootRoute)
 	users.Init(rootRoute)
+	productCategory.Init(rootRoute)
 }

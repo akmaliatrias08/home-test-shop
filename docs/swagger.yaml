@@ -51,6 +51,57 @@ definitions:
       username:
         type: string
     type: object
+  product_category.BadRequestCreateProductCategoryResponse:
+    properties:
+      message:
+        example: error message
+        type: string
+    type: object
+  product_category.CreateProductCategoryDTO:
+    properties:
+      name:
+        example: fashion
+        type: string
+    type: object
+  product_category.ProductCategories:
+    properties:
+      created_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+      deleted_at:
+        example: "null"
+        type: string
+      id:
+        example: ab7ac1cb-17c6-4e9a-8cd8-d51d8988c5ec
+        type: string
+      name:
+        example: electronic
+        type: string
+      updated_at:
+        example: "2024-07-16T23:13:03.115483+07:00"
+        type: string
+    type: object
+  product_category.SuccessCreateProductCategoryResponse:
+    properties:
+      data:
+        $ref: '#/definitions/product_category.ProductCategories'
+      message:
+        example: success
+        type: string
+    type: object
+  product_category.SuccessGetAllProductCategoryResponse:
+    properties:
+      count:
+        example: 1
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/product_category.ProductCategories'
+        type: array
+      message:
+        example: success
+        type: string
+    type: object
   role.CreateRoleDTO:
     properties:
       name:
@@ -237,6 +288,63 @@ paths:
       summary: Check health APIs
       tags:
       - health
+  /product-category:
+    get:
+      description: Get all product category
+      parameters:
+      - description: Number of page to load
+        in: query
+        name: page
+        type: string
+      - description: Number page size or limit to display data
+        in: query
+        name: pageSize
+        type: string
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product_category.SuccessGetAllProductCategoryResponse'
+      summary: Get all product category
+      tags:
+      - product-category
+    post:
+      description: Create new product category
+      parameters:
+      - description: Create product category
+        in: body
+        name: product-category
+        required: true
+        schema:
+          $ref: '#/definitions/product_category.CreateProductCategoryDTO'
+      - default: Bearer <Add access token here>
+        description: Insert your access token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product_category.SuccessCreateProductCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/product_category.BadRequestCreateProductCategoryResponse'
+      summary: Create product category
+      tags:
+      - product-category
   /role:
     get:
       description: Get all role that exist
