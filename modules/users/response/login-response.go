@@ -6,3 +6,7 @@ type SuccessLoginResponse struct {
 	Data    users.TokenResponse `json:"data"`
 	Message string              `json:"message" example:"success"`
 }
+
+type BadRequestLoginResponse struct {
+	Error string `json:"error" example:"username not exist"`
+}

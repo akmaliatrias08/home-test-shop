@@ -32,20 +32,20 @@ func GetUserByUsername(username string) (models.User, error) {
 func Register(createUserDTO user.CreateUserDTO) (models.User, error) {
 	var user models.User
 
-	//validate if role is exist
-	role, err := role.GetRoleById(createUserDTO.RoleID)
-	if err != nil {
-		return user, err
-	}
-
 	//validate username is unique
 	userByUsername, err := GetUserByUsername(createUserDTO.Username)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		return user, nil
+		return user, err
 	}
 
 	if strings.Compare(createUserDTO.Username, userByUsername.Username) == 0 {
 		return user, errors.New("username already exist")
+	}
+
+	//validate if role is exist
+	role, err := role.GetRoleById(createUserDTO.RoleID)
+	if err != nil {
+		return user, err
 	}
 
 	user.Name = createUserDTO.Name

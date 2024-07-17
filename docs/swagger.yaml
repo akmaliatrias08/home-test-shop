@@ -67,6 +67,18 @@ definitions:
     required:
     - name
     type: object
+  users.BadRequestLoginResponse:
+    properties:
+      error:
+        example: username not exist
+        type: string
+    type: object
+  users.BadRequestRegisterResponse:
+    properties:
+      error:
+        example: username is exist
+        type: string
+    type: object
   users.CreateUserDTO:
     properties:
       name:
@@ -102,7 +114,7 @@ definitions:
   users.SuccessAuthorizeToken:
     properties:
       message:
-        example: success
+        example: token is valid
         type: string
     type: object
   users.SuccessLoginResponse:
@@ -113,10 +125,24 @@ definitions:
         example: success
         type: string
     type: object
+  users.SuccessRegisterResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.User'
+      message:
+        example: success
+        type: string
+    type: object
   users.TokenResponse:
     properties:
       access_token:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        type: string
+    type: object
+  users.UnauthorizedToken:
+    properties:
+      message:
+        example: unauthorized
         type: string
     type: object
 host: localhost:5000
@@ -128,7 +154,7 @@ info:
 paths:
   /auth/authorize:
     get:
-      description: Authorize user token after login
+      description: Authorize user access token after login
       parameters:
       - default: Bearer <Add access token here>
         description: Insert your access token
@@ -143,6 +169,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/users.SuccessAuthorizeToken'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/users.UnauthorizedToken'
       summary: Authorize user
       tags:
       - auth
@@ -163,6 +193,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/users.SuccessLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/users.BadRequestLoginResponse'
       summary: Login user
       tags:
       - auth
@@ -182,7 +216,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.User'
+            $ref: '#/definitions/users.SuccessRegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/users.BadRequestRegisterResponse'
       summary: Register user
       tags:
       - auth

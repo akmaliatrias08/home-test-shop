@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/auth/authorize": {
             "get": {
-                "description": "Authorize user token after login",
+                "description": "Authorize user access token after login",
                 "produces": [
                     "application/json"
                 ],
@@ -40,6 +40,12 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/users.SuccessAuthorizeToken"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/users.UnauthorizedToken"
                         }
                     }
                 }
@@ -72,6 +78,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/users.SuccessLoginResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/users.BadRequestLoginResponse"
+                        }
                     }
                 }
             }
@@ -101,7 +113,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/users.SuccessRegisterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/users.BadRequestRegisterResponse"
                         }
                     }
                 }
@@ -357,6 +375,24 @@ const docTemplate = `{
                 }
             }
         },
+        "users.BadRequestLoginResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "username not exist"
+                }
+            }
+        },
+        "users.BadRequestRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "username is exist"
+                }
+            }
+        },
         "users.CreateUserDTO": {
             "type": "object",
             "required": [
@@ -406,7 +442,7 @@ const docTemplate = `{
             "properties": {
                 "message": {
                     "type": "string",
-                    "example": "success"
+                    "example": "token is valid"
                 }
             }
         },
@@ -422,12 +458,33 @@ const docTemplate = `{
                 }
             }
         },
+        "users.SuccessRegisterResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/models.User"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "success"
+                }
+            }
+        },
         "users.TokenResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+            }
+        },
+        "users.UnauthorizedToken": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "unauthorized"
                 }
             }
         }

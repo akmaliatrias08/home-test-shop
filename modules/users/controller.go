@@ -24,7 +24,8 @@ func routes(rg *gin.RouterGroup) {
 // @Param			register body users.CreateUserDTO true  "Register user"
 // @Tags         	auth
 // @Produce      	json
-// @Success      	200  {object} models.User
+// @Success      	200  {object} users.SuccessRegisterResponse
+// @Failure      	400  {object} users.BadRequestRegisterResponse
 // @Router       	/auth/register [post]
 func registerUser(ctx *gin.Context) {
 	var input users.CreateUserDTO
@@ -56,6 +57,7 @@ func registerUser(ctx *gin.Context) {
 // @Tags         	auth
 // @Produce      	json
 // @Success      	200  {object} users.SuccessLoginResponse
+// @Failure      	400  {object} users.BadRequestLoginResponse
 // @Router       	/auth/login [post]
 func loginUser(ctx *gin.Context) {
 	var input users.LoginDTO
@@ -87,6 +89,7 @@ func loginUser(ctx *gin.Context) {
 // @Tags         	auth
 // @Produce      	json
 // @Success      	200  {object} users.SuccessAuthorizeToken
+// @Failure      	401  {object} users.UnauthorizedToken
 // @Router       	/auth/authorize [get]
 func authorizeToken(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
